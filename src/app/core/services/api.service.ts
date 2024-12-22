@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import { ApiResponse } from '../interfaces/api.response.interface';
 import { HttpOptions } from '../interfaces/http-options.interface';
-import {environment} from '../../environments/environment'; // Assurez-vous d'importer HttpOptions
+import {environment} from '../../../environments/environment'; // Assurez-vous d'importer HttpOptions
 
 @Injectable({
   providedIn: 'root',

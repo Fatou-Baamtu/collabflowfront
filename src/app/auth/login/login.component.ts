@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from '../../core/services/auth.service';
 import {FormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
+import {CustomInputComponent} from '../../shared/components/ui/custom/custom-input.component';
+import {CustomCheckboxComponent} from '../../shared/components/ui/custom/custom-checkbox.component';
+import {CustomButtonComponent} from '../../shared/components/ui/custom/custom-button.component';
+
 
 @Component({
   selector: 'app-login',
@@ -10,7 +14,12 @@ import {NgIf} from '@angular/common';
   styleUrls: ['./login.component.css'],
   imports: [
     FormsModule,
-    NgIf
+    NgIf,
+    RouterLink,
+    CustomInputComponent,
+    CustomCheckboxComponent,
+    CustomButtonComponent,
+
   ]
 })
 export class LoginComponent {
@@ -22,11 +31,17 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(): void {
-    this.authService.login(this.username, this.password, this.rememberMe).subscribe({
+    const authRequest = {
+      username: this.username,
+      password: this.password,
+      rememberMe: this.rememberMe
+    };
+    this.authService.login(authRequest).subscribe({
       next: (response) => {
         console.log(response)
         // Redirection après succès
         if (response.success) {
+          // Réinitialiser le formulaire (les champs et la validité)
           console.log('et pourquoi tu navigue pas ??')
 
           this.router.navigate(['dashboard']);
