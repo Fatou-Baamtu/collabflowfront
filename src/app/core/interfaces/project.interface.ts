@@ -10,6 +10,5 @@ export interface Project {
   startDate?: Date;
   endDate?: Date;
   tasks?: Task[];
-  members?: { user: User; role: string }[];
 }
 

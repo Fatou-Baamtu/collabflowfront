@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {AuthService} from '../../core/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
-import {CustomInputComponent} from '../../shared/components/ui/custom/custom-input.component';
-import {CustomCheckboxComponent} from '../../shared/components/ui/custom/custom-checkbox.component';
-import {CustomButtonComponent} from '../../shared/components/ui/custom/custom-button.component';
+import {CustomInputComponent} from '../../../shared/components/ui/custom/custom-input.component';
+import {CustomCheckboxComponent} from '../../../shared/components/ui/custom/custom-checkbox.component';
+import {CustomButtonComponent} from '../../../shared/components/ui/custom/custom-button.component';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class LoginComponent {
           // Réinitialiser le formulaire (les champs et la validité)
           console.log('et pourquoi tu navigue pas ??')
 
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['projects']);
         }
       },
       error: (err) => {

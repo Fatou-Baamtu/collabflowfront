@@ -54,6 +54,7 @@ export class TaskCardComponent {
   }
 
   openTaskDetail() {
+    console.log('la tache cliquer' + this.task.id)
     this.taskDetailDialog.open(this.task.id);
     this.taskDetailDialog.afterClosed.subscribe(saved => {
       if (saved) {

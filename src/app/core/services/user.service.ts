@@ -10,35 +10,16 @@ import {ApiResponse} from '../interfaces/api.response.interface';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly endpoint = '/api/admin/users';
-  public currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private readonly endpoint = '/admin/users';
+
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService
-  ) {
-    if (this.authService.isAuthenticated()) {
-      this.loadCurrentUser().subscribe();
-    }
-  }
-
-  loadCurrentUser(): Observable<User | null> {
-    return this.apiService.get<string>('/authenticate').pipe(
-      switchMap((response: ApiResponse<string>) => {
-        if (response.success && response.data) {
-          return this.getUserByLogin(response.data); // Retourne Observable<User>
-        }
-        return of(null); // Retourne Observable<null>
-      }),
-      tap(user => this.currentUserSubject.next(user))
-    );
-  }
+  ) {}
 
 
-  getCurrentUser(): User | null {
-    return this.currentUserSubject.getValue();
-  }
+
+
 
   getUserByLogin(login: string): Observable<User> {
     return this.apiService.get<User>(`${this.endpoint}/${login}`).pipe(

@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {CommentService} from '../../core/services/comment.service';
 import {Comment} from '../../core/interfaces/comment.interface';
 import {UserService} from '../../core/services/user.service';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-comment-section',
@@ -84,8 +85,8 @@ export class CommentSectionComponent {
   @Input() taskId!: number;
   comments = signal<Comment[]>([]);
   newCommentContent = '';
-  currentUser = inject(UserService).getCurrentUser();
-  userService = inject(UserService);
+  currentUser = inject(AuthService).getCurrentUser();
+  userService = inject(AuthService);
 
   constructor(private commentService: CommentService) {}
 

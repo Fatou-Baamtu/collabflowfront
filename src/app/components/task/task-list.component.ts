@@ -2,21 +2,21 @@ import {Component, OnInit, signal} from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, DragDropModule } from '@angular/cdk/drag-drop';
 
 import { CommonModule } from '@angular/common';
-import { TaskCardComponent } from './task/task-card.component';
-import { Task } from '../core/interfaces/task.interface';
-import { Status } from '../core/interfaces/enums';
-import { TaskService } from '../core/services/task.service';
+import { TaskCardComponent } from '../task-detail/task-card.component';
+import { Task } from '../../core/interfaces/task.interface';
+import { Status } from '../../core/interfaces/enums';
+import { TaskService } from '../../core/services/task.service';
 import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-task-list',
   imports: [CommonModule, TaskCardComponent, DragDropModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  templateUrl: './task-list.component.html',
+  styleUrl: './task-list.component.css'
 })
 
-export class DashboardComponent implements OnInit {
+export class TaskListComponent implements OnInit {
   todoTasks = signal<Task[]>([]);
   inProgressTasks = signal<Task[]>([]);
   doneTasks = signal<Task[]>([]);

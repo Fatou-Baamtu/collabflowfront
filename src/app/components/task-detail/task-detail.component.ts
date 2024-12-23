@@ -7,33 +7,32 @@ import {TaskService} from '../../core/services/task.service';
 import {CommentSectionComponent} from '../comment/comment-section.component';
 import {Task} from '../../core/interfaces/task.interface';
 import {ToastService} from '../../core/services/toast.service';
+import {CustomInputComponent} from '../../shared/components/ui/custom/custom-input.component';
+import {CustomButtonComponent} from '../../shared/components/ui/custom/custom-button.component';
 
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, SubtaskListComponent, CommentSectionComponent, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, SubtaskListComponent, CommentSectionComponent, FormsModule, ReactiveFormsModule, CustomInputComponent, CustomButtonComponent],
   template: `
     <div class="task-detail p-4">
       <form [formGroup]="taskForm" class="space-y-4">
-        <div>
-          <input
-            type="text"
-            formControlName="title"
-            class="w-full text-xl font-semibold p-2 border-b focus:border-blue-500 focus:outline-none"
-          />
-        </div>
+        <app-custom-input
+          label="Titre"
+          id="title"
+          formControlName="title"
+          [required]="true"
+          placeholder="Entrez le titre de la tâche"
+        ></app-custom-input>
 
-        <div class="flex gap-4">
-          <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              formControlName="description"
-              rows="3"
-              class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            ></textarea>
-          </div>
-        </div>
+        <app-custom-input
+          label="Description"
+          id="description"
+          formControlName="description"
+          placeholder="Entrez la description de la tâche"
+          type="textarea"
+        ></app-custom-input>
 
         <div class="flex gap-4">
           <div>
@@ -47,38 +46,22 @@ import {ToastService} from '../../core/services/toast.service';
               <option [value]="Status.DONE">Terminé</option>
             </select>
           </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Priorité</label>
-            <select
-              formControlName="priority"
-              class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option [value]="Priority.LOW">Basse</option>
-              <option [value]="Priority.NORMAL">Normale</option>
-              <option [value]="Priority.URGENT">Urgente</option>
-            </select>
-          </div>
         </div>
 
         <app-subtask-list [taskId]="taskId"></app-subtask-list>
         <app-comment-section [taskId]="taskId"></app-comment-section>
 
         <div class="flex justify-end gap-2">
-          <button
-            type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-            (click)="cancel()"
-          >
+          <app-custom-button type="button" (onClick)="cancel()">
             Annuler
-          </button>
-          <button
+          </app-custom-button>
+          <app-custom-button
             type="submit"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-            (click)="save()"
+            (onClick)="save()"
+            [disabled]="!taskForm.valid"
           >
             Enregistrer
-          </button>
+          </app-custom-button>
         </div>
       </form>
     </div>
@@ -106,6 +89,7 @@ export class TaskDetailComponent {
   constructor(private taskService: TaskService) {}
 
   ngOnInit() {
+    console.log('dans les detail !!!!!' + this.taskId)
     if (this.taskId) {
       this.taskService.getById(this.taskId).subscribe(response => {
         if (response.success) {

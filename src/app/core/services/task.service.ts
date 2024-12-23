@@ -11,10 +11,10 @@ import {FormControl, ɵValue} from '@angular/forms';
 })
 export class TaskService {
   private api = inject(ApiService);
-  private endpoint = '/api/tasks';
+  private endpoint = '/tasks';
 
   getAll(projectId: number): Observable<ApiResponse<Task[]>> {
-    return this.api.get<Task[]>(`${this.endpoint}?projectId=${projectId}`);
+    return this.api.get<Task[]>(`${this.endpoint}/by-project?projectId=${projectId}`);
   }
 
   getById(id: number): Observable<ApiResponse<Task>> {

@@ -10,10 +10,11 @@ import {Status} from '../interfaces/enums';
 })
 export class SubTaskService {
   private api = inject(ApiService);
-  private endpoint = '/api/subtasks';
+  private endpoint = '/sub-tasks';
 
   getAll(taskId: number): Observable<ApiResponse<SubTask[]>> {
-    return this.api.get<SubTask[]>(`${this.endpoint}?taskId=${taskId}`);
+    console.log('getAll', taskId);
+    return this.api.get<SubTask[]>(`${this.endpoint}/by-task?taskId=${taskId}`);
   }
 
   create(subtask: SubTask): Observable<ApiResponse<SubTask>> {

@@ -10,7 +10,7 @@ import {EntityEnum} from '../interfaces/enums';
 })
 export class AuditLogService {
   private api = inject(ApiService);
-  private endpoint = '/api/audit-logs';
+  private endpoint = '/audit-logs';
 
   getAll(page = 0, size = 10): Observable<ApiResponse<AuditLog[]>> {
     return this.api.get<AuditLog[]>(`${this.endpoint}?page=${page}&size=${size}`);

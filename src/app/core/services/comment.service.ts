@@ -10,10 +10,10 @@ import {Comment} from '../interfaces/comment.interface';
 })
 export class CommentService {
   private api = inject(ApiService);
-  private endpoint = '/api/comments';
+  private endpoint = '/comments';
 
   getAll(taskId: number): Observable<ApiResponse<Comment[]>> {
-    return this.api.get<Comment[]>(`${this.endpoint}?taskId=${taskId}`);
+    return this.api.get<Comment[]>(`${this.endpoint}/by-task?taskId=${taskId}`);
   }
 
   create(comment: Comment): Observable<ApiResponse<Comment>> {

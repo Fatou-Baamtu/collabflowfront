@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ApiResponse } from '../interfaces/api.response.interface';
 import { HttpOptions } from '../interfaces/http-options.interface';
-import {environment} from '../../../environments/environment'; // Assurez-vous d'importer HttpOptions
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -17,15 +17,34 @@ export class ApiService {
     }),
     withCredentials: true
   };
+
   constructor(private http: HttpClient) {}
 
+  // Méthode pour formater la réponse de manière uniforme
+  private formatResponse<T>(response: any, wrapResponse: boolean = true): ApiResponse<T> {
+    console.log('la reponse' + response );
+    if (wrapResponse) {
+      return {
+        success: true,
+        data: response,
+        status: 200
+      };
+    }
+    return response;
+  }
+
   // Méthode GET
-  public get<T>(endpoint: string, options?: HttpOptions): Observable<ApiResponse<T>> {
+  public get<T>(
+    endpoint: string,
+    options?: HttpOptions,
+    wrapResponse: boolean = true
+  ): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http.get<ApiResponse<T>>(
+    return this.http.get<any>(
       fullUrl,
       { ...this.defaultOptions, ...options }
     ).pipe(
+      map(response => this.formatResponse<T>(response, wrapResponse)),
       tap(response => this.logResponse('GET', fullUrl, response))
     );
   }
@@ -43,51 +62,59 @@ export class ApiService {
       data,
       { ...this.defaultOptions, ...options }
     ).pipe(
-      map(response => {
-        if (wrapResponse) {
-          return {
-            success: true,
-            data: response,
-            status: 200
-          };
-        }
-        return response;
-      }),
+      map(response => this.formatResponse<T>(response, wrapResponse)),
       tap(response => this.logResponse('POST', fullUrl, response))
     );
   }
 
   // Méthode PUT
-  public put<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
+  public put<T>(
+    endpoint: string,
+    data: any,
+    options?: HttpOptions,
+    wrapResponse: boolean = true
+  ): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http.put<ApiResponse<T>>(
+    return this.http.put<any>(
       fullUrl,
       data,
       { ...this.defaultOptions, ...options }
     ).pipe(
+      map(response => this.formatResponse<T>(response, wrapResponse)),
       tap(response => this.logResponse('PUT', fullUrl, response))
     );
   }
 
   // Méthode DELETE
-  public delete<T>(endpoint: string, options?: HttpOptions): Observable<ApiResponse<T>> {
+  public delete<T>(
+    endpoint: string,
+    options?: HttpOptions,
+    wrapResponse: boolean = true
+  ): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http.delete<ApiResponse<T>>(
+    return this.http.delete<any>(
       fullUrl,
       { ...this.defaultOptions, ...options }
     ).pipe(
+      map(response => this.formatResponse<T>(response, wrapResponse)),
       tap(response => this.logResponse('DELETE', fullUrl, response))
     );
   }
 
-  // Méthode PATCH ajoutée
-  public patch<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
+  // Méthode PATCH
+  public patch<T>(
+    endpoint: string,
+    data: any,
+    options?: HttpOptions,
+    wrapResponse: boolean = true
+  ): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http.patch<ApiResponse<T>>(
+    return this.http.patch<any>(
       fullUrl,
       data,
       { ...this.defaultOptions, ...options }
     ).pipe(
+      map(response => this.formatResponse<T>(response, wrapResponse)),
       tap(response => this.logResponse('PATCH', fullUrl, response))
     );
   }
@@ -97,5 +124,17 @@ export class ApiService {
     if (!environment.production) {
       console.log(`${method} request to ${url} was successful:`, response);
     }
+  }
+  public getText(endpoint: string, options?: HttpOptions): Observable<string> {
+    const fullUrl = `${this.baseUrl}${endpoint}`;
+    const textOptions = {
+      ...this.defaultOptions,
+      ...options,
+      responseType: 'text' as 'text'  // Forcer le type de réponse en texte
+    };
+
+    return this.http.get(fullUrl, textOptions).pipe(
+      tap(response => this.logResponse('GET', fullUrl, response))
+    );
   }
 }
